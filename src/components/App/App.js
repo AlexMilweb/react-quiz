@@ -1,8 +1,9 @@
 import React from 'react';
+import Layout from '../../hoc/Layout/Layout';
 import { App } from './App.styled';
 
 export default () => (
-  <App>
-    <h1>React JS project!</h1>
-  </App>
+  <Layout>
+    <h1>Hello react!</h1>
+  </Layout>
 );
