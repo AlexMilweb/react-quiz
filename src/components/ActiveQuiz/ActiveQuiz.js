@@ -2,14 +2,17 @@ import React from 'react';
 import AnswerList from '../AnswerList/AnswerList';
 import { ActiveQuiz, Question, Header, Step } from './ActiveQuiz.styled';
 
-export default ({ answers }) => (
+export default ({ answers, question, onAnswerClick, quizLength, answerNumber }) => (
   <ActiveQuiz>
     <Header>
       <Question>
-        <strong>4. </strong>Как дела?
+        <strong>{answerNumber}.</strong>&nbsp;
+        {question}
       </Question>
-      <Step>4 из 12</Step>
+      <Step>
+        {answerNumber} из {quizLength}
+      </Step>
     </Header>
-    <AnswerList answers={answers} />
+    <AnswerList answers={answers} onAnswerClick={onAnswerClick} />
   </ActiveQuiz>
 );
