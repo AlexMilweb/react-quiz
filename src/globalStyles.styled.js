@@ -17,5 +17,12 @@ export const GlobalStyles = createGlobalStyle`
   ul {
     margin: 0;
     padding: 0;
+    list-style: none;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
   }
 `;

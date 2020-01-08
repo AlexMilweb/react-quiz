@@ -5,6 +5,7 @@ export const ActiveQuiz = styled.div`
   color: white;
   border: 2px solid white;
   border-radius: 5px;
+  min-height: 300px;
 `;
 
 export const Header = styled.div`
