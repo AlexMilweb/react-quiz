@@ -30,7 +30,7 @@ export default () => {
   ]);
   let [activeQuestion, setActiveQuestion] = useState(0);
   let [answerState, setAnswerState] = useState(null);
-  let [isFinished, setIsFinished] = useState(true);
+  let [isFinished, setIsFinished] = useState(false);
   let [results, setResults] = useState({});
 
   const isQuizFinished = () => {
