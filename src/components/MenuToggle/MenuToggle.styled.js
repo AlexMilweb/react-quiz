@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const MenuToggle = styled.div`
   position: fixed;
+  z-index: 100;
   top: 40px;
   left: 40px;
   width: 24px;
