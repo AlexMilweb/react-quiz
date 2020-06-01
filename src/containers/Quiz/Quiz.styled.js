@@ -4,7 +4,6 @@ export const Quiz = styled.div`
   padding-top: 100px;
   flex-grow: 1;
   width: 100%;
-  background-image: linear-gradient(90deg, #5041b2, #7969e6);
 `;
 
 export const Title = styled.h1`

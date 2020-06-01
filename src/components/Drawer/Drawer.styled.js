@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 export const Drawer = styled.nav`
   position: fixed;
@@ -26,7 +27,7 @@ export const LinkWrapper = styled.li`
   margin-bottom: 15px;
 `;
 
-export const Link = styled.a`
+export const Link = styled(NavLink)`
   color: #363f54;
   font-size: 30px;
   text-decoration: none;
