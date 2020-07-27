@@ -25,4 +25,13 @@ export const GlobalStyles = createGlobalStyle`
     border: none;
     outline: none;
   }
+
+  label {
+    margin: 0;
+    padding: 0;
+  }
+
+  select {
+    outline: none;
+  }
 `;

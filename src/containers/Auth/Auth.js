@@ -87,8 +87,7 @@ export default () => {
   }
 
   const renderInputs = () => Object.keys(formControls).map((controlName, index) => {
-    const control = formControls[controlName];
-    const { value, type, label, errorMessage, valid, touched, validation } = control;
+    const { value, type, label, errorMessage, valid, touched, validation } = formControls[controlName]
 
     return (
       <Input
