@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import api from '../../api'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import Select from '../../components/Select/Select'
@@ -58,8 +59,19 @@ export default () => {
     setIsFormValid(false)
   }
 
-  const createQuizHandler = e => {
+  const createQuizHandler = async e => {
     e.preventDefault()
+
+    try {
+      await api.post('/quizes.json', quiz)
+
+      setQuiz([])
+      setFormControls(createFormControls())
+      setRightAnswerId(1)
+      setIsFormValid(false)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const changeHandler = (value, controlName) => {

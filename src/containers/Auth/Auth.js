@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import is from 'is_js'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
@@ -33,12 +34,34 @@ export default () => {
   });
   const [isFormValid, setFormValid] = useState(false)
 
-  const loginHandler = () => {
-    console.log('login')
+  const loginHandler = async () => {
+    const authData = {
+      email: formControls.email.value,
+      password: formControls.password.value,
+      returnSecureToken: true
+    }
+
+    try {
+      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDxCqc2npXAMaS19glvJt-rsLTK7bRwDmI', authData)
+      console.log(response)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const registerHandler = () => {
-    console.log('register')
+  const registerHandler = async () => {
+    const authData = {
+      email: formControls.email.value,
+      password: formControls.password.value,
+      returnSecureToken: true
+    }
+
+    try {
+      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDxCqc2npXAMaS19glvJt-rsLTK7bRwDmI', authData)
+      console.log(response)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const submitHandler = e => {

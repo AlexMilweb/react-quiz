@@ -1,5 +1,3 @@
-import is from "is_js"
-
 export const createControl = (config, validation) => ({
   ...config,
   validation,

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import Preloader from '../../components/Preloader/Preloader'
 
 export const QuizList = styled.div`
   display: flex;
@@ -29,4 +30,12 @@ export const Link = styled(NavLink)`
   &:hover {
     color: #363f54;
   }
+`;
+
+export const PreloaderStyled = styled(Preloader)`
+  width: 80px;
+  height: 80px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
 `;
