@@ -1,30 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import api from '../../api'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { fetchQuizes } from '../../store/actions/quiz'
 import { QuizList, Title, Wrapper, ListItem, Link, PreloaderStyled } from './QuizList.styled'
 
-export default () => {
-  const [quizes, setQuizes] = useState([])
-  const [loading, setLoading] = useState(true)
+const mapStateToProps = ({ quiz }) => ({
+  quizes: quiz.quizes,
+  loading: quiz.loading
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchQuizes }, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(({ quizes, loading, fetchQuizes }) => {
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.get('/quizes.json')
-
-        const quizes = []
-        Object.keys(response.data).forEach((key, index) => {
-          quizes.push({
-            id: key,
-            name: `Тест №${index + 1}`
-          })
-        })
-        setQuizes(quizes)
-        setLoading(false)
-      } catch (e) {
-        console.log(e)
-      }
-    })()
-  }, [])
+    fetchQuizes()
+  }, [fetchQuizes])
 
   const renderQuizes = () => {
     return quizes.map(({ id, name }) => {
@@ -42,7 +33,7 @@ export default () => {
     <QuizList>
       <Wrapper>
         <Title>Список тестов</Title>
-        {loading
+        {loading && quizes.length === 0
           ?
             <PreloaderStyled />
             :
@@ -53,4 +44,4 @@ export default () => {
       </Wrapper>
     </QuizList>
   )
-}
+})
