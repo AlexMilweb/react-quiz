@@ -1,86 +1,62 @@
-import React, { useEffect, useState } from 'react'
-import api from '../../api'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { fetchQuizById, quizAnswerClick, quizRetry } from '../../store/actions/quiz'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
 import { Quiz, Title, Wrapper, PreloaderStyled } from './Quiz.styled'
 
-export default ({ match }) => {
-  let [quiz, setQuiz] = useState([])
-  let [activeQuestion, setActiveQuestion] = useState(0)
-  let [answerState, setAnswerState] = useState(null)
-  let [isFinished, setIsFinished] = useState(false)
-  let [results, setResults] = useState({})
-  const [loading, setLoading] = useState(true)
+const mapStateToProps = ({ quiz }) => ({
+  quiz: quiz.quiz,
+  activeQuestion: quiz.activeQuestion,
+  answerState: quiz.answerState,
+  isFinished: quiz.isFinished,
+  results: quiz.results,
+  loading: quiz.loading
+})
 
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    fetchQuizById,
+    quizAnswerClick,
+    quizRetry
+  },
+  dispatch
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(({
+  fetchQuizById,
+  quizAnswerClick,
+  quizRetry,
+  match,
+  quiz,
+  activeQuestion,
+  answerState,
+  isFinished,
+  results,
+  loading
+}) => {
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.get(`/quizes/${match.params.id}.json`)
-        setQuiz(response.data)
-        setLoading(false)
-      } catch (e) {
-        console.log(e)
-      }
-    })()
-  }, [])
+    fetchQuizById(match.params.id)
 
-  const isQuizFinished = () => {
-    return activeQuestion + 1 === quiz.length
-  }
-
-  const nextStepTimeout = () => {
-    const timeout = setTimeout(() => {
-      if (isQuizFinished()) {
-        setIsFinished(true)
-      } else {
-        setActiveQuestion(activeQuestion + 1)
-        setAnswerState(null)
-      }
-
-      clearTimeout(timeout)
-    }, 3000)
-  }
-
-  const onAnswerClickHandler = answerId => {
-    const question = quiz[activeQuestion]
-
-    if (question.rightAnswerId === answerId) {
-      setResults({ ...results, [activeQuestion]: 'success' })
-      setAnswerState({ [answerId]: 'success' })
-
-      nextStepTimeout()
-    } else {
-      setResults({ ...results, [activeQuestion]: 'error' })
-
-      const rightAnswer = quiz[activeQuestion].rightAnswerId
-      setAnswerState({ [answerId]: 'error', [rightAnswer]: 'success' })
-
-      nextStepTimeout()
-    }
-  }
-
-  const retryHandler = () => {
-    setIsFinished(false)
-    setActiveQuestion(0)
-    setResults({})
-    setAnswerState(null)
-  }
+    return () => quizRetry()
+  }, [fetchQuizById, match.params.id, quizRetry])
 
   return (
     <Quiz>
       <Wrapper>
         <Title>Ответьте на все вопросы</Title>
-        {loading
+        {loading || !quiz
           ?
             (
               <PreloaderStyled />
             ) : isFinished ? (
-              <FinishedQuiz results={results} quiz={quiz} onRetry={retryHandler} />
+              <FinishedQuiz results={results} quiz={quiz} onRetry={quizRetry} />
             ) : (
               <ActiveQuiz
                 answers={quiz[activeQuestion].answers}
                 question={quiz[activeQuestion].question}
-                onAnswerClick={onAnswerClickHandler}
+                onAnswerClick={quizAnswerClick}
                 quizLength={quiz.length}
                 answerNumber={activeQuestion + 1}
                 answerState={answerState}
@@ -90,4 +66,4 @@ export default ({ match }) => {
       </Wrapper>
     </Quiz>
   )
-}
+})

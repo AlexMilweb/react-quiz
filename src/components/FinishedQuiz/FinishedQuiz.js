@@ -42,7 +42,7 @@ export default ({ results, quiz, onRetry }) => {
       <Button onClick={onRetry} type='primary' style={{ marginRight: '15px' }}>
         Повторить
       </Button>
-      <Link to="/">
+      <Link to='/' onClick={onRetry}>
         <Button type='success'>Перейти в список тестов</Button>
       </Link>
     </FinishedQuiz>
