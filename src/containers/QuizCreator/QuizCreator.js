@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import api from '../../api'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import Select from '../../components/Select/Select'
 import { createControl, validate, validateForm } from '../../form/formFramework'
+import { createQuizQuestion, finishCreateQuiz } from '../../store/actions/create'
 import { QuizCreator, Wrapper, Title, Form } from './QuizCreator.styled'
 
 const createOptionControl = number => createControl({
@@ -23,8 +25,19 @@ const createFormControls = () => ({
   option4: createOptionControl(4),
 })
 
-export default () => {
-  const [quiz, setQuiz] = useState([])
+const mapStateToProps = ({ create }) => ({
+  quiz: create.quiz
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    createQuizQuestion,
+    finishCreateQuiz
+  },
+  dispatch
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(({ quiz, createQuizQuestion, finishCreateQuiz }) => {
   const [formControls, setFormControls] = useState(createFormControls())
   const [rightAnswerId, setRightAnswerId] = useState(1)
   const [isFormValid, setIsFormValid] = useState(false)
@@ -35,14 +48,11 @@ export default () => {
 
   const addQuestionHandler = e => {
     e.preventDefault()
-
-    const newQuiz = quiz.concat()
-    const index = newQuiz.length + 1
     const { question, option1, option2, option3, option4 } = formControls
 
     const questionItem = {
       question: question.value,
-      id: index,
+      id: quiz.length + 1,
       rightAnswerId,
       answers: [
         { text: option1.value, id: option1.id },
@@ -52,26 +62,21 @@ export default () => {
       ]
     }
 
-    newQuiz.push(questionItem)
-    setQuiz(newQuiz)
+    createQuizQuestion(questionItem)
     setFormControls(createFormControls())
     setRightAnswerId(1)
     setIsFormValid(false)
   }
 
-  const createQuizHandler = async e => {
+  const createQuizHandler = e => {
     e.preventDefault()
 
-    try {
-      await api.post('/quizes.json', quiz)
+    createQuizQuestion([])
+    setFormControls(createFormControls())
+    setRightAnswerId(1)
+    setIsFormValid(false)
 
-      setQuiz([])
-      setFormControls(createFormControls())
-      setRightAnswerId(1)
-      setIsFormValid(false)
-    } catch (e) {
-      console.log(e)
-    }
+    finishCreateQuiz()
   }
 
   const changeHandler = (value, controlName) => {
@@ -154,4 +159,4 @@ export default () => {
       </Wrapper>
     </QuizCreator>
   )
-}
+})
