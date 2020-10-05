@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import is from 'is_js'
+import { auth } from '../../store/actions/auth'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import { Auth, Container, Title, Form } from './Auth.styled'
 
-export default () => {
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    auth
+  },
+  dispatch
+)
+
+export default connect(null, mapDispatchToProps)(({ auth }) => {
   const [formControls, setFormControls] = useState({
     email: {
       value: '',
@@ -34,34 +43,20 @@ export default () => {
   });
   const [isFormValid, setFormValid] = useState(false)
 
-  const loginHandler = async () => {
-    const authData = {
-      email: formControls.email.value,
-      password: formControls.password.value,
-      returnSecureToken: true
-    }
-
-    try {
-      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDxCqc2npXAMaS19glvJt-rsLTK7bRwDmI', authData)
-      console.log(response)
-    } catch (e) {
-      console.log(e)
-    }
+  const loginHandler = () => {
+    auth(
+      formControls.email.value,
+      formControls.password.value,
+      true
+    )
   }
 
-  const registerHandler = async () => {
-    const authData = {
-      email: formControls.email.value,
-      password: formControls.password.value,
-      returnSecureToken: true
-    }
-
-    try {
-      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDxCqc2npXAMaS19glvJt-rsLTK7bRwDmI', authData)
-      console.log(response)
-    } catch (e) {
-      console.log(e)
-    }
+  const registerHandler = () => {
+    auth(
+      formControls.email.value,
+      formControls.password.value,
+      false
+    )
   }
 
   const submitHandler = e => {
@@ -154,4 +149,4 @@ export default () => {
       </Container>
     </Auth>
   )
-}
+})

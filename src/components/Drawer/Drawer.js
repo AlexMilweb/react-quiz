@@ -1,28 +1,37 @@
-import React from 'react';
-import Backdrop from '../Backdrop/Backdrop';
-import { Drawer, LinkList, LinkWrapper, Link } from './Drawer.styled';
+import React from 'react'
+import Backdrop from '../Backdrop/Backdrop'
+import { Drawer, LinkList, LinkWrapper, Link } from './Drawer.styled'
 
-const links = [
-  {
-    to: '/',
-    label: 'Список',
-    exact: true,
-  },
-  {
-    to: '/auth',
-    label: 'Авторизация',
-    exact: false,
-  },
-  {
-    to: '/quiz-creator',
-    label: 'Создать тест',
-    exact: false,
-  },
-];
-
-export default ({ isOpen, onClose }) => {
+export default ({ isOpen, onClose, isAuthenticated }) => {
   const clickHandler = () => {
-    onClose();
+    onClose()
+  }
+
+  let links = [
+    {
+      to: '/',
+      label: 'Список',
+      exact: true,
+    }
+  ]
+
+  if (isAuthenticated) {
+    links.push({
+      to: '/quiz-creator',
+      label: 'Создать тест',
+      exact: false,
+    })
+    links.push({
+      to: '/logout',
+      label: 'Выйти',
+      exact: false,
+    })
+  } else {
+    links.push({
+      to: '/auth',
+      label: 'Авторизация',
+      exact: false,
+    })
   }
 
   return (
@@ -38,5 +47,5 @@ export default ({ isOpen, onClose }) => {
       </Drawer>
       {isOpen && <Backdrop onClick={onClose} />}
     </>
-  );
+  )
 }
